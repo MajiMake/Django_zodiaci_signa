@@ -1,18 +1,19 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 
-zodiacs = {'leo': 'Знак зодиака Лев',
-           'scorpio': 'Знак зодиака Скорпион',
-           'aries': 'Знак зодиака Овен',
-           'taurus': 'Знак зодиака Телец',
-           'libra': 'Знак зодиака Весы',
-           'gemini': 'Знак зодиака Близнецы',
-           'cancer': 'Знак зодиака Рак',
-           'virgo': 'Знак зодиака Дева',
-           'saggitarius': 'Знак зодиака Стрелец',
-           'capricorn': 'Знак зодиака Козерог',
-           'aquarius': 'Знак зодиака Водолей',
-           'pisces': 'Знак зодиака Рыбы',
-           }
+zodiacs = {
+    'aries': 'Знак зодиака Овен',
+    'taurus': 'Знак зодиака Телец',
+    'gemini': 'Знак зодиака Близнецы',
+    'cancer': 'Знак зодиака Рак',
+    'leo': 'Знак зодиака Лев',
+    'virgo': 'Знак зодиака Дева',
+    'libra': 'Знак зодиака Весы',
+    'scorpio': 'Знак зодиака Скорпион',
+    'saggitarius': 'Знак зодиака Стрелец',
+    'capricorn': 'Знак зодиака Козерог',
+    'aquarius': 'Знак зодиака Водолей',
+    'pisces': 'Знак зодиака Рыбы',
+}
 
 
 def get_info_about_sign_zodiac(request, sign_zodiac: str):
@@ -23,4 +24,9 @@ def get_info_about_sign_zodiac(request, sign_zodiac: str):
 
 
 def get_info_about_sign_zodiac_by_number(request, sign_zodiac: int):
-    return HttpResponse(f'цифра еп - {sign_zodiac}')
+    zodiacs_list = list(zodiacs)
+    if sign_zodiac > len(zodiacs_list):
+        return HttpResponseNotFound('Нифига')
+    else:
+        zodiac_name = zodiacs_list[sign_zodiac - 1]
+        return HttpResponseRedirect(f'/horoscope/{zodiac_name}')

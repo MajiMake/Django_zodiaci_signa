@@ -1,5 +1,5 @@
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 
 week_dir = {'monday': 'Дела на понедельник',
             'tuesday': 'Дела на вторник',
@@ -7,14 +7,6 @@ week_dir = {'monday': 'Дела на понедельник',
             'thursday': 'Дела на четверг',
             'friday': 'Дела на пятницу', }
 
-week_integer ={1: 'Сегодня 1 день недели',
-           2: 'Сегодня 2 день недели',
-           3: 'Сегодня 3 день недели',
-           4: 'Сегодня 4 день недели',
-           5: 'Сегодня 5 день недели',
-           6: 'Сегодня 6 день недели',
-           7: 'Сегодня 7 день недели',
-           }
 
 
 def week_str(request, week_str: str):
@@ -25,10 +17,13 @@ def week_str(request, week_str: str):
 
 
 def week_int(request, week_int: int):
-    try:
-        return HttpResponse(week_integer[week_int])
-    except KeyError:
-        return HttpResponse('Неверный день недели')
+    week_list = list(week_dir)
+    if week_int > len(week_list):
+        return HttpResponseNotFound('Fuck off')
+    else:
+        weekday = week_list[week_int-1]
+        return HttpResponseRedirect(f'/todo_week/{weekday}')
+
 
 
 
