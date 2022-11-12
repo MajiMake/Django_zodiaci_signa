@@ -4,6 +4,6 @@ from .views import *
 
 
 urlpatterns = [
-    path('int:<week>/', week_int),
-    path('str:<week>/', week),
+    path('<int:week_int>/', week_int),
+    path('<week_str>/', week_str),
 ]

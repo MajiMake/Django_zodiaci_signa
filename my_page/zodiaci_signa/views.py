@@ -23,7 +23,4 @@ def get_info_about_sign_zodiac(request, sign_zodiac: str):
 
 
 def get_info_about_sign_zodiac_by_number(request, sign_zodiac: int):
-    try:
-        return HttpResponse(zodiacs[sign_zodiac])
-    except KeyError:
-        return HttpResponse(f'Введено неверное значение - {sign_zodiac}')
+    return HttpResponse(f'цифра еп - {sign_zodiac}')
