@@ -1,5 +1,6 @@
 
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
+from django.urls import reverse
 
 week_dir = {'monday': 'Дела на понедельник',
             'tuesday': 'Дела на вторник',
@@ -22,7 +23,8 @@ def week_int(request, week_int: int):
         return HttpResponseNotFound('Fuck off')
     else:
         weekday = week_list[week_int-1]
-        return HttpResponseRedirect(f'/todo_week/{weekday}')
+        redirected_urls = reverse('week_name', args=(weekday,))
+        return HttpResponseRedirect(redirected_urls)
 
 
 

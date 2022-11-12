@@ -1,4 +1,5 @@
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.urls import reverse
 
 zodiacs = {
     'aries': 'Знак зодиака Овен',
@@ -16,6 +17,7 @@ zodiacs = {
 }
 
 
+def horoscope
 def get_info_about_sign_zodiac(request, sign_zodiac: str):
     try:
         return HttpResponse(zodiacs[sign_zodiac])
@@ -29,4 +31,5 @@ def get_info_about_sign_zodiac_by_number(request, sign_zodiac: int):
         return HttpResponseNotFound('Нифига')
     else:
         zodiac_name = zodiacs_list[sign_zodiac - 1]
-        return HttpResponseRedirect(f'/horoscope/{zodiac_name}')
+        redirected_urls = reverse('horoscope_name', args=(zodiac_name,))
+        return HttpResponseRedirect(redirected_urls)
