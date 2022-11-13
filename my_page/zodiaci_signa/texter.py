@@ -17,18 +17,22 @@ zodiacs = {
 }
 types_of_zadiac = {
     'earth': ('capricorn', 'taurus', 'virgo'),
-    'fire': ('aries', 'leo', 'saggitarius'),
+    'fire': ('aries', 'lion', 'saggitarius'),
     'air': ('libra', 'aquarius', 'gemini'),
     'water': ('cancer', 'scorpio', 'pisces')
 
 }
 
 
-def path_creator(request, list, path_name):
+def path_creator(request, list, path_name, args=True):
     result = ''
     zodiacs_list = list
     for sign in zodiacs_list:
-        result += f'<li><a href="{sign}">{sign.title()}</a></li>'
+        if args is False:
+            redirected_path = reverse(path_name)
+        else:
+            redirected_path = reverse(path_name, args=sign)
+        result += f'<li><a href="{redirected_path}">{sign.title()}</a></li>'
     response = f'<ol>{result}</ol>'
     return response
 
@@ -50,29 +54,18 @@ def get_info_about_sign_zodiac_by_number(request, sign_zodiac: int):
         return HttpResponseRedirect(redirected_urls)
 
 def index(request):
-    response = path_creator(request, zodiacs, path_name=reverse('home'))
+    response = path_creator(request, zodiacs, 'horoscope_name')
     return HttpResponse(response)
 
 
 def typing(request):
-    result = ''
-    for sign in types_of_zadiac:
-        path = reverse('types', args=(sign,))
-        result += f'<li><a href="{path}">{sign.title()}</a></li>'
-        response = f'<ol>{result}</ol>'
+    response = path_creator(request, list=types_of_zadiac, path_name='type')
     return HttpResponse(response)
 
-def chosen_one(request, typess):
-    result=''
-    for sign_type in types_of_zadiac[typess]:
-        print(types_of_zadiac[typess])
-        path = reverse('horoscope_name', args=(sign_type, ))
-        result += f'<li><a href={path}>{sign_type.title()}</a></li>'
-        response = f'<ol>{result}</ol>'
-        print(response)
+
+def chosen_one(request, types):
+    result = []
+    for sign_type in types_of_zadiac[types]:
+        result.append(sign_type)
+    response = path_creator(request=request, list=result, path_name='path_to_type', args=True)
     return HttpResponse(response)
-
-def get_date(request, date):
-    pass
-
-
