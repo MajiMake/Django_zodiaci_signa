@@ -1,5 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.urls import reverse
+from django.template.loader import render_to_string
+from django.shortcuts import render
 
 zodiacs = {
     'aries': 'Знак зодиака Овен',
@@ -34,10 +36,7 @@ def path_creator(request, list, path_name):
 
 
 def get_info_about_sign_zodiac(request, sign_zodiac: str):
-    try:
-        return HttpResponse(zodiacs[sign_zodiac])
-    except KeyError:
-        return HttpResponse(f'Введено неверное значение - {sign_zodiac}')
+    return render(request, 'horoscope/info_zodiac.html')
 
 
 def get_info_about_sign_zodiac_by_number(request, sign_zodiac: int):
@@ -48,6 +47,7 @@ def get_info_about_sign_zodiac_by_number(request, sign_zodiac: int):
         zodiac_name = zodiacs_list[sign_zodiac - 1]
         redirected_urls = reverse('horoscope_name', args=(zodiac_name,))
         return HttpResponseRedirect(redirected_urls)
+
 
 def index(request):
     response = path_creator(request, zodiacs, path_name=reverse('home'))
@@ -62,17 +62,104 @@ def typing(request):
         response = f'<ol>{result}</ol>'
     return HttpResponse(response)
 
+
 def chosen_one(request, typess):
-    result=''
+    result = ''
     for sign_type in types_of_zadiac[typess]:
         print(types_of_zadiac[typess])
-        path = reverse('horoscope_name', args=(sign_type, ))
+        path = reverse('horoscope_name', args=(sign_type,))
         result += f'<li><a href={path}>{sign_type.title()}</a></li>'
         response = f'<ol>{result}</ol>'
         print(response)
     return HttpResponse(response)
 
-def get_date(request, date):
-    pass
 
+def get_date(request, month: int, day: int):
+    last_day_month = {
+        1: 31,
+        2: 28,
+        3: 31,
+        4: 30,
+        5: 31,
+        6: 30,
+        7: 31,
+        8: 31,
+        9: 30,
+        10: 31,
+        11: 30,
+        12: 31
+    }
+    if month not in last_day_month or day > last_day_month[month]:
+        print(last_day_month[month], day)
+        return HttpResponseNotFound('Неверная дата')
+    else:
+        if month == 1:
+            if day in range(1, 20):
+                return HttpResponse(zodiacs['capricorn'])
 
+            else:
+                return HttpResponse(zodiacs['pisces'])
+
+        elif month == 2:
+            if day in range(1, 20):
+                return HttpResponse(zodiacs['pisces'])
+
+            else:
+                return HttpResponse(zodiacs['aquarius'])
+
+        elif month == 3:
+            if day in range(1, 21):
+                return HttpResponse(zodiacs['aquarius'])
+
+            else:
+                return HttpResponse(zodiacs['aries'])
+
+        elif month == 4:
+            if day in range(1, 20):
+                return HttpResponse(zodiacs['aries'])
+
+            else:
+                return HttpResponse(zodiacs['taurus'])
+
+        elif month == 5:
+            if day in range(1, 21):
+                return HttpResponse(zodiacs['taurus'])
+
+            else:
+                return HttpResponse(zodiacs['gemini'])
+
+        elif month == 6:
+            if day in range(1, 21):
+                return HttpResponse(zodiacs['gemini'])
+            else:
+                return HttpResponse(zodiacs['cancer'])
+        elif month == 7:
+            if day in range(1, 23):
+                return HttpResponse(zodiacs['cancer'])
+            else:
+                return HttpResponse(zodiacs['leo'])
+        elif month == 8:
+            if day in range(1, 23):
+                return HttpResponse(zodiacs['leo'])
+            else:
+                return HttpResponse(zodiacs['virgo'])
+        elif month == 9:
+            if day in range(1, 23):
+                return HttpResponse(zodiacs['virgo'])
+            else:
+                return HttpResponse(zodiacs['libra'])
+        elif month == 10:
+            if day in range(1, 24):
+                return HttpResponse(zodiacs['libra'])
+            else:
+                return HttpResponse(zodiacs['scorpio'])
+        elif month == 11:
+            if day in range(1, 23):
+                return HttpResponse(zodiacs['scorpio'])
+            else:
+                return HttpResponse(zodiacs['saggitarius'])
+        elif month == 12:
+            if day in range(1, 22):
+                return HttpResponse(zodiacs['saggitarius'])
+            else:
+                return HttpResponse(zodiacs['capricorn'])
