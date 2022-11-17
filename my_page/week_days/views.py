@@ -9,6 +9,7 @@ week_dir = {'monday': 'Дела на понедельник',
             'thursday': 'Дела на четверг',
             'friday': 'Дела на пятницу', }
 
+temp = 'templates/week_days'
 
 
 def week_str(request, week_str: str):
@@ -29,6 +30,23 @@ def week_int(request, week_int: int):
 
 def index(request):
     return render(request, 'week_days/greeting.html')
+
+def kianu_sample(request):
+    dict_kianu = {
+        'year_born': 1988,
+        'city_born': 'Stavropol',
+        'movie_name': 'Машина'
+    }
+    return render(request, 'week_days/kianu.html', context=dict_kianu)
+
+def gwr_sample(request):
+    context = {
+        'power_man': 'Narve Laeret',
+        'bar_name': 'Bob\'s BBQ & Grill',
+        'count_needle': 1790
+    }
+
+    return render(request, 'gwr.html', context=context)
 
 
 
